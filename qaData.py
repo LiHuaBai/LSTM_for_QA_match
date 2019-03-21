@@ -213,41 +213,7 @@ def trainingBatchIter(questions, answers, labels, questionIds, batchSize):
 
         # 一次输出一组，比如batchsize = 8，实际是输出8个问题对应的数据，但是因为每个问题的回答数不同，所以每组的形状[x,100]，x不同
         yield np.array(resultQuestions), np.array(trueAnswers), np.array(falseAnswers)
-    # trueAnswer = ""
-    # dataLen = questionIds[-1]
-    # batchNum = int(dataLen / batchSize) + 1
-    # line = 0
-    # for batch in range(batchNum):
-    #     # 对于每一批问题
-    #     resultQuestions, trueAnswers, falseAnswers = [], [], []
-    #     for questionId in range(batch * batchSize, min((batch + 1) * batchSize, dataLen)):
-    #         # 对于每一个问题
-    #         trueCount = 0
-    #         while questionIds[line] == questionId:
-    #             # 对于某个问题中的某一行
-    #             if labels[line] == 0:
-    #                 resultQuestions.append(questions[line])
-    #                 falseAnswers.append(answers[line])
-    #             else:
-    #                 trueAnswer = answers[line]
-    #                 trueCount += 1
-    #             line += 1
-    #         trueAnswers.extend([trueAnswer] * (questionIds.count(questionId) - trueCount))
-    #     if batch * batchSize == min((batch + 1) * batchSize, dataLen):
-    #         trueCount = 0
-    #         questionId = batch * batchSize
-    #         while line<len(questionIds) and questionIds[line] == questionId:
-    #             # 对于某个问题中的某一行
-    #             if labels[line] == 0:
-    #                 resultQuestions.append(questions[line])
-    #                 falseAnswers.append(answers[line])
-    #             else:
-    #                 trueAnswer = answers[line]
-    #                 trueCount += 1
-    #             line += 1
-    #         trueAnswers.extend([trueAnswer] * (questionIds.count(questionId) - trueCount))
-    #     yield np.array(resultQuestions), np.array(trueAnswers), np.array(falseAnswers)
-
+    
 def testingBatchIter(questions, answers, batchSize):
     """
     逐个获取每一批测试数据的迭代器

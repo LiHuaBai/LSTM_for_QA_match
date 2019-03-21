@@ -64,9 +64,9 @@ def train():
 
 if __name__ == '__main__':
     # 定义参数
-    trainingFile = "../data/train_data_sample.json"
+    trainingFile = "./data/train_data_sample.json"
     #developFile = "data/develop.data"
-    testingFile = "../data/dev_data_sample.json"
+    testingFile = "./data/dev_data_sample.json"
     resultFile = "predictRst.score"
     saveFile = "newModel/savedModel"
     #trainedModel = "newModel/savedModel"
@@ -79,7 +79,7 @@ if __name__ == '__main__':
     lrDownRate = 0.5  # 学习速度下降速度
     lrDownCount = 4  # 学习速度下降次数
     epochs = 20  # 每次学习速度指数下降之前执行的完整epoch次数
-    batchSize = 16  # 每一批次处理的<b>问题</b>个数
+    batchSize = 8  # 每一批次处理的<b>问题</b>个数
 
     rnnSize = 100  # LSTM cell中隐藏层神经元的个数
     margin = 0.1  # M is constant margin
@@ -113,7 +113,7 @@ if __name__ == '__main__':
             print("4")
             saver = tf.train.Saver()
             print("加载完成！")
-            input()
+            # input()
 
             # 加载模型或训练模型
             if os.path.exists(trainedModel + '.index'):

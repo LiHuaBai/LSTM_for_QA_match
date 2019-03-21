@@ -24,13 +24,13 @@ class QaLSTMNet(object):
         # 设置word embedding层
         with tf.device("/cpu:0"), tf.name_scope("embedding_layer"):
             tfEmbedding = tf.Variable(tf.to_float(self.embeddings), trainable=True, name="W")
-            print("----tfEmbedding.shape = ",tfEmbedding.shape)
+            # print("----tfEmbedding.shape = ",tfEmbedding.shape)
             questions = tf.nn.embedding_lookup(tfEmbedding, self.inputQuestions)
-            print("----questions.shape = ",questions.shape)
+            # print("----questions.shape = ",questions.shape)
             trueAnswers = tf.nn.embedding_lookup(tfEmbedding, self.inputTrueAnswers)
-            print("----trueAnswers.shape = ",trueAnswers.shape)
+            # print("----trueAnswers.shape = ",trueAnswers.shape)
             falseAnswers = tf.nn.embedding_lookup(tfEmbedding, self.inputFalseAnswers)
-            print("----falseAnswers.shape = ",falseAnswers.shape)
+            # print("----falseAnswers.shape = ",falseAnswers.shape)
             testQuestions = tf.nn.embedding_lookup(tfEmbedding, self.inputTestQuestions)
             testAnswers = tf.nn.embedding_lookup(tfEmbedding, self.inputTestAnswers)
         print("h2")
@@ -57,15 +57,10 @@ class QaLSTMNet(object):
             testAnswer2 = tf.nn.tanh(self.max_pooling(testAnswer1))
 
         self.trueCosSim = self.getCosineSimilarity(question2, trueAnswer2)
-        # print("~~~~~trueCosSim.shape = ",self.trueCosSim.shape)
         self.falseCosSim = self.getCosineSimilarity(question2, falseAnswer2)
-        # print("~~~~~falseCosSim.shape = ",self.falseCosSim.shape)
         self.loss = self.getLoss(self.trueCosSim, self.falseCosSim, self.margin)
-        # print("~~~~~loss.shape = ",self.loss.shape)
         # Summaries for loss and accuracy
         loss_summary = tf.summary.scalar("loss", self.loss)
-        #trueCosSim_summary = tf.summary.scalar("trueAccuracy", self.trueCosSim)
-        #falseCosSim_summary = tf.summary.scalar("falseAccuracy", self.falseCosSim)
         # Dev summaries
         self.dev_summary_op = tf.summary.merge([loss_summary ])
 
@@ -73,21 +68,13 @@ class QaLSTMNet(object):
 
     @staticmethod
     def biLSTMCell(x, hiddenSize):
-        # print("~~~~~x.shape = ",x)
         input_x = tf.transpose(x, [1, 0, 2])# 0 1 2 变成1 0 2，最外面两个维度转置
-        # print("~~~~~input_x00.shape = ",input_x)
         input_x = tf.unstack(input_x)   #多维变成低维，默认axio = 0，最外层的维度
-        # print("~~~~~input_x11.shape = ",input_x)
         lstm_fw_cell = tf.contrib.rnn.BasicLSTMCell(hiddenSize, forget_bias=1.0, state_is_tuple=True)
-        # print("~~~~~lstm_fw_cell.shape = ",lstm_fw_cell)
         lstm_bw_cell = tf.contrib.rnn.BasicLSTMCell(hiddenSize, forget_bias=1.0, state_is_tuple=True)
-        # print("~~~~~lstm_bw_cell.shape = ",lstm_bw_cell)
         output, _, _ = tf.contrib.rnn.static_bidirectional_rnn(lstm_fw_cell, lstm_bw_cell, input_x, dtype=tf.float32)
-        # print("~~~~~output00.shape = ",output)
         output = tf.stack(output)       #一维变成多维
-        # print("~~~~~output11.shape = ",output)
         output = tf.transpose(output, [1, 0, 2])
-        # print("~~~~~output22.shape = ",output)
         return output
 
     @staticmethod
