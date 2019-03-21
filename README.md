@@ -5,4 +5,4 @@
 
 使用了Tensorflow 1.12 以及 python 3.6.8
 
-word2vec文件在网盘http://pan.baidu.com/s/1dFeNNK9
+word2vec[文件下载](http://pan.baidu.com/s/1dFeNNK9)
